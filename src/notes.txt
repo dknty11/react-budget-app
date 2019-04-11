@@ -1,0 +1,22 @@
+Destructuring
+
+const person = {
+  name: 'Vern',
+  age: 26,
+  location: {
+    city: 'Danang',
+    street: 'Huy can'
+  }
+}
+
+// Destructuring
+// Access object person
+const { name, age } = person
+console.log(`${name} is ${age}`) // Expected result: Vern is 26
+
+// THe ability to change variable name from street to myHouseAddress
+const { city, street: myHouseAddress } = person.location
+console.log(`It's ${myHouseAddress} in ${city}`)
+
+// Also set default value if there is no person value variable
+const { name = 'Anonymous', age = 0 } = person
