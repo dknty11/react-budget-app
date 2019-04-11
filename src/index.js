@@ -5,11 +5,7 @@ import './index.css';
 
 import * as serviceWorker from './serviceWorker';
 
-import { createStore } from 'redux';
-
-const add = ({a, b}, c) => a + b + c
-
-console.log(add({ a: 1, b: 12 }, 100))
+import { createStore, combineReducers } from 'redux';
 
 const incrementCount = ({ incrementBy = 1 } = {}) => ({
   type: 'INCREMENT',
@@ -33,9 +29,56 @@ const resetCount = ({ count = 0 } = {}) => ({
 
 // Create redux reducer
 // 1. Reducers are pure functions
+const expensesReducerDefautlState = {
+  id: 'default id',
+  description: 'unknown',
+};
 
-let result;
-const add = (a, b) => { result=a+b };
+const filtersReducerDefautlState = {
+  text: '',
+  sortBy: 'date',
+  startDate: undefined,
+  endDate: undefined
+};
+
+const expensesReducer = (state = expensesReducerDefautlState, action) => {
+  switch (action.type) {
+    default:
+      return state;
+  }
+}
+
+const filtersReducer = (state = filtersReducerDefautlState, action) => {
+  switch (action.type) {
+    default:
+      return state;
+  }
+}
+
+// Store creation
+const newStore = createStore(
+  combineReducers({
+    expenses: expensesReducer,
+    filters: filtersReducer
+  })
+);
+console.log(newStore.getState())
+
+const demoState = {
+  expenses: [{
+    id: 'random',
+    description: 'I don;t know',
+    note: 'This is a note',
+    amount: 123213,
+    createAt: Date().now
+  }],
+  filters: {
+    text: 'rent',
+    sortBy: 'amount',
+    startDate: undefined,
+    endDate: undefined
+  }
+}
 
 const countReducer = (state = { count: 0 }, action) => {
   switch (action.type) {
