@@ -15,7 +15,7 @@ export default (state = initialState, action) => {
 }
 
 const login = (username, password) => {
-  const url = 'localhost:3000/users/login'
+  const url = 'http://localhost:3003/users/login'
   axios.post(url, {}, {
     auth: {
       email: username,
