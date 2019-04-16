@@ -1,14 +1,19 @@
-import React, { Component } from 'react';
+import React from 'react';
+import { connect } from 'react-redux';
+import ExpenseForm from './ExpenseForm'
+import { addExpense } from '../actions/expenses'
 import '../App.css';
 
-class Create extends Component {
-  render() {
-    return (
-      <div className="App">
-        <p>This is creating page</p>
-      </div>
-    );
-  }
-};
+const Create = (props) => (
+  <div>
+    <h1>Add Expense</h1>
+    <ExpenseForm 
+      onSubmit={(expense) => {
+        props.dispatch(addExpense(expense));
+        props.history.push('/');
+      }}
+    />
+  </div>
+)
 
-export default Create;
+export default connect()(Create);

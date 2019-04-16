@@ -20,3 +20,12 @@ console.log(`It's ${myHouseAddress} in ${city}`)
 
 // Also set default value if there is no person value variable
 const { name = 'Anonymous', age = 0 } = person
+
+
+different between concat() and push()
+
+Spread operator:
+  const names = ['myname', 'your name'];
+  [...names] // Expected: ['myname', 'your name']
+  [...names, 'his name'] // Expected: ['myname', 'your name', 'his name']
+  ['Andy', ...names] // Expected: ['Andy', 'myname', 'your name']

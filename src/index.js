@@ -1,131 +1,44 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import AppRouter from './routers/AppRouter'
+import { Provider } from 'react-redux';
+import AppRouter from './routers/AppRouter';
+import configureStore from './store/configureStore';
+import getVisibleExpenses from './selectors/expenses';
+import { addExpense } from './actions/expenses';
+// import { setTextFilter } from './actions/filters';
 import './index.css';
 
 import * as serviceWorker from './serviceWorker';
 
-import { createStore, combineReducers } from 'redux';
+const store = configureStore();
 
-const incrementCount = ({ incrementBy = 1 } = {}) => ({
-  type: 'INCREMENT',
-  incrementBy
-});
+store.dispatch(addExpense({ description: 'Rent', amount: 123, createAt: 1234 }))
+store.dispatch(addExpense({ description: 'Water bill', amount: 234, createAt: 12345 }))
+store.dispatch(addExpense({ description: 'Gas bill', amount: 345, createAt: -123456 }))
+store.dispatch(addExpense({ description: 'Breakfast', amount: 456, createAt: 1234567 }))
 
-const decrementCount = ({ decrementBy = 2 } = {}) => ({
-  type: 'DECREMENT',
-  decrementBy
-});
+// store.dispatch(editExpense( expenseOne.expense.id, { amount: 50 }))
+// store.dispatch(removeExpense(expenseOne.expense.id))
 
-const setCount = ({ count = 10 } = {}) => ({
-  type: 'SET',
-  count
-})
+// store.dispatch(setTextFilter('breakfast'))
+// store.dispatch(sortByAmount());
+// store.dispatch(sortByDate(123));
+// store.dispatch(setStartDate(123));
+// store.dispatch(setEndDate());
 
-const resetCount = ({ count = 0 } = {}) => ({
-  type: 'RESET',
-  count
-})
+const state = store.getState();
+const visibleExpenses = getVisibleExpenses(state.expenses, state.filters)
+console.log(visibleExpenses);
 
-// Create redux reducer
-// 1. Reducers are pure functions
-const expensesReducerDefautlState = {
-  id: 'default id',
-  description: 'unknown',
-};
+const jsx = (
+  <Provider store={store}>
+    <AppRouter />
+  </Provider>
+)
 
-const filtersReducerDefautlState = {
-  text: '',
-  sortBy: 'date',
-  startDate: undefined,
-  endDate: undefined
-};
-
-const expensesReducer = (state = expensesReducerDefautlState, action) => {
-  switch (action.type) {
-    default:
-      return state;
-  }
-}
-
-const filtersReducer = (state = filtersReducerDefautlState, action) => {
-  switch (action.type) {
-    default:
-      return state;
-  }
-}
-
-// Store creation
-const newStore = createStore(
-  combineReducers({
-    expenses: expensesReducer,
-    filters: filtersReducer
-  })
-);
-console.log(newStore.getState())
-
-const demoState = {
-  expenses: [{
-    id: 'random',
-    description: 'I don;t know',
-    note: 'This is a note',
-    amount: 123213,
-    createAt: Date().now
-  }],
-  filters: {
-    text: 'rent',
-    sortBy: 'amount',
-    startDate: undefined,
-    endDate: undefined
-  }
-}
-
-const countReducer = (state = { count: 0 }, action) => {
-  switch (action.type) {
-    case 'INCREMENT': 
-      return {
-        count: state.count + action.incrementBy
-      };
-    case 'DECREMENT':
-      return {
-        count: state.count - action.decrementBy
-      };
-    case 'SET':
-      return {
-        count: action.count
-      }
-    case 'RESET':
-      return {
-        count: action.count
-      };
-    default:
-      return state;
-  }
-};
-
-const store = createStore(countReducer);
-
-// Subscribe fire every time state changes
-const unsubscribe = store.subscribe(() => {
-  console.log(store.getState());
-})
-
-// Increment the count
-store.dispatch(incrementCount({ incrementBy: 5 }));
-
-//Decrement the count
-store.dispatch(decrementCount({ decrementBy: 10 }));
-
-// Set the counter
-store.dispatch(setCount({ count: 100 }))
-
-// Reset the count to 0
-store.dispatch(resetCount());
-
-
-ReactDOM.render(<AppRouter />, document.getElementById('root'));
+ReactDOM.render(jsx, document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.register();
+serviceWorker.unregister();
