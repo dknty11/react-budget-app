@@ -1,10 +1,17 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { login } from '../actions/login'
 
-export default class LoginForm extends Component {
-  state = {
-    username: '',
-    password: '',
-    error: ''
+class LoginForm extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      username: '',
+      password: '',
+      error: ''
+    }
   }
   onUsernameChange = (e) => {
     const username = e.target.value;
@@ -20,11 +27,10 @@ export default class LoginForm extends Component {
     if(!this.state.username || !this.state.password) {
       this.setState(() => ({ error: 'Please enter username and password' }))
     } else {
-      this.setState(() => ({ error: '' }));
-      this.props.onSubmit({
-        username: this.state.username,
-        password: this.state.password
-      })
+      this.props.login(this.state).then(
+        (res) => this.context.router.push('/dashboard'),
+        (err) => this.setState({ errors: err.response.data.errors})
+      );
     }
   }
 
@@ -51,3 +57,9 @@ export default class LoginForm extends Component {
     )
   }
 }
+
+LoginForm.propTypes = {
+  login: PropTypes.func.isRequired
+}
+
+export default connect(null, { login })(LoginForm);
